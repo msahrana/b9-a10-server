@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const {MongoClient, ServerApiVersion} = require("mongodb");
+const {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,10 +21,55 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const userCollection = client.db("tourismDB").collection("user");
+    const spotCollection = client.db("tourismDB").collection("spot");
+    const countryCollection = client.db("tourismDB").collection("country");
+
+    /* user api */
+    app.get("/user", async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
 
     app.post("/user", async (req, res) => {
       const user = req.body;
       const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+    /* spot api */
+    app.get("/spot", async (req, res) => {
+      const result = await spotCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/spot/:email", async (req, res) => {
+      const email = {email: req.params.email};
+      const result = await spotCollection.find(email).toArray();
+      res.send(result);
+    });
+
+    app.get("/singleSpot/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await spotCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/spot", async (req, res) => {
+      const newSpot = req.body;
+      const result = await spotCollection.insertOne(newSpot);
+      res.send(result);
+    });
+
+    /* country api */
+    app.get("/country", async (req, res) => {
+      const result = await countryCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/country", async (req, res) => {
+      const newCountry = req.body;
+      const result = await countryCollection.insertOne(newCountry);
       res.send(result);
     });
 
