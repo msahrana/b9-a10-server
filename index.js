@@ -61,6 +61,37 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/singleSpot/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const options = {upsert: true};
+      const updatedSpot = req.body;
+      const spot = {
+        $set: {
+          name: updatedSpot.name,
+          country: updatedSpot.country,
+          location: updatedSpot.location,
+          description: updatedSpot.description,
+          cost: updatedSpot.cost,
+          time: updatedSpot.time,
+          visitors: updatedSpot.visitors,
+          seasonality: updatedSpot.seasonality,
+          email: updatedSpot.email,
+          username: updatedSpot.username,
+          photoURL: updatedSpot.photoURL,
+        },
+      };
+      const result = await spotCollection.updateOne(filter, spot, options);
+      res.send(result);
+    });
+
+    app.delete("/singleSpot/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await spotCollection.deleteOne(query);
+      res.send(result);
+    });
+
     /* country api */
     app.get("/country", async (req, res) => {
       const result = await countryCollection.find().toArray();
