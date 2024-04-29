@@ -114,9 +114,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Tourism Economics server is running");
+  res.send("Rana Tourism Economics server is running");
 });
 
 app.listen(port, () => {
-  console.log(`Tourism Economics server is running on port: ${port}`);
+  console.log(`Rana Tourism Economics server is running on port: ${port}`);
 });
