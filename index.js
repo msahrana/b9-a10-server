@@ -113,6 +113,7 @@ async function run() {
 }
 run().catch(console.dir);
 
+/* server api */
 app.get("/", (req, res) => {
   res.send("Rana Tourism Economics server is running");
 });
